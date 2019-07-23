@@ -1,0 +1,3 @@
+Run the following command to get the service endpoint using minikube
+
+minikube service go-hello-world-service --url

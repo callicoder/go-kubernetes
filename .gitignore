@@ -1,0 +1,5 @@
+main
+go-kubernetes
+out/
+vendor/
+_vendor-*

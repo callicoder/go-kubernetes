@@ -1,0 +1,34 @@
+---
+apiVersion: apps/v1
+kind: Deployment                 # Type of Kubernetes resource
+metadata:
+  name: go-hello-world           # Unique name of the Kubernetes resource
+spec:
+  replicas: 3                    # Number of pods to run at any given time
+  selector:
+    matchLabels:
+      name: go-hello-world       # This deployment applies to any Pods matching the specified label
+  template:                      # This deployment will create a set of pods using the configurations in this template
+    metadata:
+      labels:                    # The labels that will be applied to all of the pods in this deployment
+        name: go-hello-world 
+    spec:
+      containers:
+      - name: go-hello-world
+        image: callicoder/go-hello-world:1.0.0 
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 8080  # Should match the port number that the Go application listens on    
+---
+apiVersion: v1
+kind: Service                    # Type of kubernetes resource
+metadata:
+  name: go-hello-world-service   # Unique name of the resource
+spec:
+  type: NodePort                 # If you're deploying on cloud, you can use `type: LoadBalancer`. It will automatically provision a load balancer with the cloud provider that will route traffic to your application.
+  ports:                         # Take incoming HTTP requests on port 9090 and forward them to the targetPort of 8080
+  - name: http
+    port: 9090
+    targetPort: 8080
+  selector:
+    name: go-hello-world         # Map any pod with name go-hello-world to this service
